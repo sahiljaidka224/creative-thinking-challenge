@@ -85,7 +85,10 @@ export const WeatherInfoView: React.FC<WeatherInfoViewProps> = ({
         </LocationTextWrapper>
         <BottomWrapper>
           <ImageWrapper>
-            <ImageView source={{ uri: imageUri }} resizeMode="contain" />
+            <ImageView
+              source={{ uri: imageUri, cache: "default" }}
+              resizeMode="contain"
+            />
             <CommonText fontSize="16px">{weatherDesc}</CommonText>
           </ImageWrapper>
           <CommonText fontSize="24px">{`${temperature} ˚C`}</CommonText>

@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import { WeatherInfo } from "./types";
 import { WeatherInfoView } from "./components";
 import styled from "styled-components/native";
+import { useOvermind } from "../overmind";
 
 type Props = {
   navigation: NavigationProp<any, any>;
@@ -51,9 +52,8 @@ const WeatherInfoHeading = styled.Text`
 `;
 
 export const Main: React.FC<Props> = ({ navigation }) => {
-  const [weatherInfo, updateWeatherInfo] = useState<WeatherInfo | undefined>(
-    undefined
-  );
+  const { state, actions } = useOvermind();
+  const { weatherInfo } = state;
   const getWeatherInfoForCurrentLocation = async () => {
     const locationData = await getCurrentLocation();
 
@@ -62,7 +62,7 @@ export const Main: React.FC<Props> = ({ navigation }) => {
       const weatherInfo = await getWeatherInfo(
         `${locationData.lat},${locationData.lng}`
       );
-      updateWeatherInfo(
+      actions.updateWeatherInfo(
         typeof weatherInfo !== "string" ? weatherInfo : undefined
       );
     }
@@ -74,13 +74,13 @@ export const Main: React.FC<Props> = ({ navigation }) => {
   return (
     <BackgroundView>
       <WeatherInfoHeading>Weather Info</WeatherInfoHeading>
-      {weatherInfo ? (
-        <WeatherInfoWrapper>
+      <WeatherInfoWrapper>
+        {weatherInfo ? (
           <WeatherInfoView weatherInfo={weatherInfo} />
-        </WeatherInfoWrapper>
-      ) : (
-        <ActivityIndicator size="large" />
-      )}
+        ) : (
+          <ActivityIndicator size="large" />
+        )}
+      </WeatherInfoWrapper>
       <ChangeLocationViewWrapper>
         <ChangeLocationView
           onPress={() => navigation.navigate("ChangeLocation")}
