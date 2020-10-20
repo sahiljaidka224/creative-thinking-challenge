@@ -6,6 +6,6 @@ export const Constants = {
   SUCCESS_CODE: 200,
   NETWORK_ERROR: "Network error, Please try again!",
   COLOR: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
 };
