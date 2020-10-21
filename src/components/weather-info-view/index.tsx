@@ -87,6 +87,7 @@ export const WeatherInfoView: React.FC<WeatherInfoViewProps> = ({
           <ImageWrapper>
             <ImageView
               source={{ uri: imageUri, cache: "default" }}
+              defaultSource={require('../../../assets/favicon.png')}
               resizeMode="contain"
             />
             <CommonText fontSize="16px">{weatherDesc}</CommonText>

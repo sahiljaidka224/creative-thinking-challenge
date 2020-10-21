@@ -97,7 +97,7 @@ export const Main: React.FC<Props> = ({ navigation }) => {
           <ChangeLocationText>Change location</ChangeLocationText>
         </Clickable>
       </ChangeLocationViewWrapper>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
     </BackgroundView>
   );
 };

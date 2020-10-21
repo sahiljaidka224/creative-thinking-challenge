@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import { Constants } from "../../constants";
 import { SelectCity } from "./select-city";
+import { StatusBar } from "expo-status-bar";
 import { WeatherInfo } from "../../@types";
 import { WeatherInfoView } from "../weather-info-view";
 import { getWeatherInfo } from "../../utils";
@@ -53,6 +54,7 @@ export const ChangeLocationView = () => {
       />
       {loading && <ActivityIndicator size="large" />}
       {weatherInfo && <WeatherInfoView weatherInfo={weatherInfo} />}
+      <StatusBar style="dark" />
     </BackgroundView>
   );
 };
