@@ -69,6 +69,7 @@ export const Main: React.FC<Props> = ({ navigation }) => {
 
     if (permissionStatus !== "granted") {
       getWeatherInfoForCurrentLocation("Melbourne");
+      return; 
     }
 
     const locationData = await getCurrentLocation();
