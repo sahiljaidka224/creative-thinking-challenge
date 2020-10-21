@@ -1,16 +1,12 @@
-import { FlatList, ListRenderItemInfo } from "react-native";
+import { ActivityIndicator, FlatList, ListRenderItemInfo } from "react-native";
+import React, { useState } from "react";
 
 import { Constants } from "../../constants";
-import { NavigationProp } from "@react-navigation/native";
-import React from "react";
 import { SelectCity } from "./select-city";
+import { WeatherInfo } from "../../@types";
+import { WeatherInfoView } from "../weather-info-view";
 import { getWeatherInfo } from "../../utils";
 import styled from "styled-components/native";
-import { useOvermind } from "../../../overmind";
-
-type ChangeLocationProps = {
-  navigation: NavigationProp<any, any>;
-};
 
 const BackgroundView = styled.SafeAreaView`
   flex: 1;
@@ -28,10 +24,10 @@ const flatListData = [
   { name: "New York", key: 3 },
 ];
 
-export const ChangeLocationView: React.FC<ChangeLocationProps> = ({
-  navigation,
-}) => {
-  const { actions } = useOvermind();
+export const ChangeLocationView = () => {
+  const [weatherInfo, updateWeatherInfo] = useState<WeatherInfo>();
+  const [loading, updateLoading] = useState<boolean>(false);
+
   const keyExtractor = (_item: Item, index: number) => {
     return index.toString();
   };
@@ -39,13 +35,12 @@ export const ChangeLocationView: React.FC<ChangeLocationProps> = ({
   const flatListRender = (renderItem: ListRenderItemInfo<Item>) => {
     const { item } = renderItem;
     const onPress = async () => {
-      actions.updateWeatherInfo(undefined);
-
-      if (navigation.canGoBack()) navigation.goBack();
+      updateLoading(true);
       const weatherInfo = await getWeatherInfo(`${item.name}`);
-      actions.updateWeatherInfo(
+      updateWeatherInfo(
         typeof weatherInfo !== "string" ? weatherInfo : undefined
       );
+      updateLoading(false);
     };
     return <SelectCity name={item.name} onPress={onPress} />;
   };
@@ -56,6 +51,8 @@ export const ChangeLocationView: React.FC<ChangeLocationProps> = ({
         keyExtractor={keyExtractor}
         renderItem={flatListRender}
       />
+      {loading && <ActivityIndicator size="large" />}
+      {weatherInfo && <WeatherInfoView weatherInfo={weatherInfo} />}
     </BackgroundView>
   );
 };

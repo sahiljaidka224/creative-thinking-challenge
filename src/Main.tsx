@@ -9,9 +9,9 @@ import { ActivityIndicator } from "react-native";
 import { Constants } from "./constants";
 import { NavigationProp } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { WeatherInfo } from "./@types";
 import { WeatherInfoView } from "./components";
 import styled from "styled-components/native";
-import { useOvermind } from "../overmind";
 
 type Props = {
   navigation: NavigationProp<any, any>;
@@ -55,13 +55,12 @@ const WeatherInfoHeading = styled.Text`
 `;
 
 export const Main: React.FC<Props> = ({ navigation }) => {
-  const { state, actions } = useOvermind();
-  const { weatherInfo } = state;
+  const [weatherInfo, updateWeatherInfo] = useState<WeatherInfo>();
 
   const getWeatherInfoForCurrentLocation = async (location: string) => {
-    const weatherInfo = await getWeatherInfo(`${location}`);
-    actions.updateWeatherInfo(
-      typeof weatherInfo !== "string" ? weatherInfo : undefined
+    const weatherData = await getWeatherInfo(`${location}`);
+    updateWeatherInfo(
+      typeof weatherData !== "string" ? weatherData : undefined
     );
   };
 
