@@ -26,7 +26,6 @@ const flatListData = [
   { name: "London", key: 1 },
   { name: "New Delhi", key: 2 },
   { name: "New York", key: 3 },
-  { name: "Auckland", key: 4 },
 ];
 
 export const ChangeLocationView: React.FC<ChangeLocationProps> = ({

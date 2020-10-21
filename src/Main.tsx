@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentLocation, getWeatherInfo } from "./utils";
+import {
+  getCurrentLocation,
+  getLocationPermission,
+  getWeatherInfo,
+} from "./utils";
 
 import { ActivityIndicator } from "react-native";
 import { Constants } from "./constants";
 import { NavigationProp } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { WeatherInfo } from "./types";
 import { WeatherInfoView } from "./components";
 import styled from "styled-components/native";
 import { useOvermind } from "../overmind";
@@ -31,7 +34,7 @@ const ChangeLocationViewWrapper = styled.View`
   align-items: center;
 `;
 
-const ChangeLocationView = styled.TouchableOpacity`
+const Clickable = styled.TouchableOpacity`
   width: 90%;
   height: 50px;
   border-radius: 10px;
@@ -54,21 +57,30 @@ const WeatherInfoHeading = styled.Text`
 export const Main: React.FC<Props> = ({ navigation }) => {
   const { state, actions } = useOvermind();
   const { weatherInfo } = state;
-  const getWeatherInfoForCurrentLocation = async () => {
-    const locationData = await getCurrentLocation();
 
-    // TODO: remove type of
+  const getWeatherInfoForCurrentLocation = async (location: string) => {
+    const weatherInfo = await getWeatherInfo(`${location}`);
+    actions.updateWeatherInfo(
+      typeof weatherInfo !== "string" ? weatherInfo : undefined
+    );
+  };
+
+  const getPermission = async () => {
+    const permissionStatus = await getLocationPermission();
+
+    if (permissionStatus !== "granted") {
+      getWeatherInfoForCurrentLocation("Melbourne");
+    }
+
+    const locationData = await getCurrentLocation();
     if (typeof locationData !== "string") {
-      const weatherInfo = await getWeatherInfo(
+      getWeatherInfoForCurrentLocation(
         `${locationData.lat},${locationData.lng}`
-      );
-      actions.updateWeatherInfo(
-        typeof weatherInfo !== "string" ? weatherInfo : undefined
       );
     }
   };
   useEffect(() => {
-    getWeatherInfoForCurrentLocation();
+    getPermission();
   }, []);
 
   return (
@@ -82,11 +94,9 @@ export const Main: React.FC<Props> = ({ navigation }) => {
         )}
       </WeatherInfoWrapper>
       <ChangeLocationViewWrapper>
-        <ChangeLocationView
-          onPress={() => navigation.navigate("ChangeLocation")}
-        >
+        <Clickable onPress={() => navigation.navigate("ChangeLocation")}>
           <ChangeLocationText>Change location</ChangeLocationText>
-        </ChangeLocationView>
+        </Clickable>
       </ChangeLocationViewWrapper>
       <StatusBar style="auto" />
     </BackgroundView>

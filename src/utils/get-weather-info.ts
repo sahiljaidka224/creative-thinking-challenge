@@ -1,5 +1,5 @@
 import { Constants } from "../constants";
-import { WeatherInfo } from "../types";
+import { WeatherInfo } from "../@types";
 
 export const getWeatherInfo = async (
   location: string

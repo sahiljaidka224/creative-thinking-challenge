@@ -1,5 +1,5 @@
 import React from "react";
-import { WeatherInfo } from "../../types";
+import { WeatherInfo } from "../../@types";
 import styled from "styled-components/native";
 
 type WeatherInfoViewProps = {

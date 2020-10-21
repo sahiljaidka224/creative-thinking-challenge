@@ -1,4 +1,4 @@
-import { WeatherInfo } from "../src/types";
+import { WeatherInfo } from "../src/@types";
 
 type State = {
   weatherInfo: WeatherInfo | undefined;
