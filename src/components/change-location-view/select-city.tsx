@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
 
@@ -20,9 +21,12 @@ const CityName = styled.Button`
 `;
 
 export const SelectCity: React.FC<SelectCityProps> = ({ name, onPress }) => {
-  return (
-    <Wrapper>
-      <CityName title={name} onPress={onPress} />
-    </Wrapper>
-  );
+  if (Platform.OS === "ios") {
+    return (
+      <Wrapper>
+        <CityName title={name} onPress={onPress} />
+      </Wrapper>
+    );
+  }
+  return <CityName title={name} onPress={onPress} />;
 };
